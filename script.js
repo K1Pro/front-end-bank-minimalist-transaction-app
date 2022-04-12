@@ -95,14 +95,30 @@ const handleHover = function (e) {
 nav.addEventListener('mouseover', handleHover.bind(0.5));
 nav.addEventListener('mouseout', handleHover.bind(1));
 
-//sticky navigation
-const initialCoords = section1.getBoundingClientRect();
-console.log(initialCoords);
-window.addEventListener('scroll', function () {
-  console.log(window.scrollY);
-  if (window.scrollY > initialCoords.top) nav.classList.add('sticky');
+//sticky navigation - old school way
+// const initialCoords = section1.getBoundingClientRect();
+// console.log(initialCoords);
+// window.addEventListener('scroll', function () {
+//   console.log(window.scrollY);
+//   if (window.scrollY > initialCoords.top) nav.classList.add('sticky');
+//   else nav.classList.remove('sticky');
+// });
+const header = document.querySelector('.header');
+const navHeight = nav.getBoundingClientRect().height;
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  console.log(entry);
+
+  if (!entry.isIntersecting) nav.classList.add('sticky');
   else nav.classList.remove('sticky');
+};
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
 });
+headerObserver.observe(header);
 
 // tabs.forEach(t => t.addEventListener('click', () => console.log('TAB')));
 
@@ -111,7 +127,6 @@ window.addEventListener('scroll', function () {
 // console.log(document.head)
 // console.log(document.body)
 
-const header = document.querySelector('.header');
 const allSections = document.querySelectorAll('.section');
 console.log(allSections);
 
@@ -125,17 +140,17 @@ message.innerHTML =
   'Just a message from Bart <button class="btn btn--close-cookie"> Got it!</button>';
 
 // header.prepend(message);
-header.append(message);
+// header.append(message);
 // header.append(message.cloneNode(true));
 
-document
-  .querySelector('.btn--close-cookie')
-  .addEventListener('click', function () {
-    message.remove();
-  });
+// document
+//   .querySelector('.btn--close-cookie')
+//   .addEventListener('click', function () {
+//     message.remove();
+//   });
 
-message.style.backgroundColor = '#37383d';
-message.style.width = '120%';
+// message.style.backgroundColor = '#37383d';
+// message.style.width = '120%';
 
 // console.log(getComputedStyle(message));
 
