@@ -50,7 +50,7 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
   //matching strategy
   if (e.target.classList.contains('nav__link')) {
     const id = e.target.getAttribute('href');
-    console.log(id);
+    // console.log(id);
     document.querySelector(id).scrollIntoView({
       behavior: 'smooth',
     });
@@ -61,7 +61,7 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
 
 tabsContainer.addEventListener('click', function (e) {
   const clicked = e.target.closest('.operations__tab');
-  console.log(clicked);
+  // console.log(clicked);
 
   //Guard clause
   if (!clicked) return;
@@ -107,7 +107,7 @@ const header = document.querySelector('.header');
 const navHeight = nav.getBoundingClientRect().height;
 const stickyNav = function (entries) {
   const [entry] = entries;
-  console.log(entry);
+  // console.log(entry);
 
   if (!entry.isIntersecting) nav.classList.add('sticky');
   else nav.classList.remove('sticky');
@@ -120,6 +120,47 @@ const headerObserver = new IntersectionObserver(stickyNav, {
 });
 headerObserver.observe(header);
 
+//Reveal sections
+const allSections = document.querySelectorAll('.section');
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+  // console.log(entry);
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove('section--hidden');
+  observer.unobserve(entry.target);
+};
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+allSections.forEach(function (section) {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+});
+
+//Lazing loading images
+const imgTargets = document.querySelectorAll('img[data-src]');
+// console.log(imgTargets);
+const loadImg = function (entries, observer) {
+  const [entry] = entries;
+  console.log(entry);
+  if (!entry.isIntersecting) return;
+  //replace src with data-src
+  entry.target.src = entry.target.dataset.src;
+
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  });
+  observer.unobserve(entry.target);
+};
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px',
+});
+
+imgTargets.forEach(img => imgObserver.observe(img));
+
 // tabs.forEach(t => t.addEventListener('click', () => console.log('TAB')));
 
 ////////////////////////////////////////////////
@@ -127,17 +168,16 @@ headerObserver.observe(header);
 // console.log(document.head)
 // console.log(document.body)
 
-const allSections = document.querySelectorAll('.section');
-console.log(allSections);
+// console.log(allSections);
 
-document.getElementById('section--1');
-const allButtons = document.getElementsByTagName('button');
-console.log(allButtons);
+// document.getElementById('section--1');
+// const allButtons = document.getElementsByTagName('button');
+// console.log(allButtons);
 
-const message = document.createElement('div');
-message.classList.add('cookie-message');
-message.innerHTML =
-  'Just a message from Bart <button class="btn btn--close-cookie"> Got it!</button>';
+// const message = document.createElement('div');
+// message.classList.add('cookie-message');
+// message.innerHTML =
+//   'Just a message from Bart <button class="btn btn--close-cookie"> Got it!</button>';
 
 // header.prepend(message);
 // header.append(message);
@@ -154,12 +194,12 @@ message.innerHTML =
 
 // console.log(getComputedStyle(message));
 
-const h1 = document.querySelector('h1');
+// const h1 = document.querySelector('h1');
 
-console.log(h1.querySelectorAll('.highlight'));
-console.log(h1.childNodes);
-console.log(h1.children);
-h1.firstElementChild.style.color = 'white';
-h1.lastElementChild.style.color = 'orangered';
+// console.log(h1.querySelectorAll('.highlight'));
+// console.log(h1.childNodes);
+// console.log(h1.children);
+// h1.firstElementChild.style.color = 'white';
+// h1.lastElementChild.style.color = 'orangered';
 
-console.log(h1.parentNode);
+// console.log(h1.parentNode);
